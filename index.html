@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://api.open-meteo.com https://geocoding-api.open-meteo.com https://customer-api.open-meteo.com https://customer-geocoding-api.open-meteo.com; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Planificateur météo</title>
+  <meta name="description" content="Comparez la météo des 16 prochains jours de plusieurs lieux dans un seul tableau : pluie, vent, températures. Sans compte, sans cookie.">
+  <meta name="theme-color" content="#663130">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="app.css">
+  <script src="i18n.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap top-inner">
+      <div class="brand">
+        <h1 data-i18n="appTitle">Planificateur météo</h1>
+        <p class="tagline" data-i18n="tagline">16 jours, plusieurs lieux côte à côte, sans compte.</p>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn btn-ghost" id="key-open" aria-haspopup="dialog">
+          <span aria-hidden="true">⚙</span> <span id="key-open-label" data-i18n="keyButtonFree">Clé API : service gratuit</span>
+        </button>
+        <button type="button" class="btn btn-ghost lang" id="lang-toggle" data-i18n="langSwitch" data-i18n-aria-label="langSwitchLabel" lang="en">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="panel" aria-labelledby="search-heading">
+      <h2 id="search-heading" data-i18n="searchHeading">Ajouter un lieu</h2>
+      <form id="search-form" class="search" role="search" novalidate>
+        <label for="search-input" class="sr-only" data-i18n="searchLabel">Nom du lieu</label>
+        <input id="search-input" type="search" name="q" autocomplete="off" spellcheck="false" maxlength="100" data-i18n-placeholder="searchPlaceholder" placeholder="Ville, village…">
+        <button type="submit" class="btn btn-primary" data-i18n="searchButton">Rechercher</button>
+      </form>
+      <div id="search-results" class="results" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="places-heading">
+      <h2 id="places-heading" data-i18n="placesHeading">Vos lieux</h2>
+      <ul id="places" class="places"></ul>
+      <p id="places-empty" class="muted" data-i18n="placesEmpty">Aucun lieu pour l'instant. Cherchez un lieu ci-dessus et ajoutez-le.</p>
+    </section>
+
+    <section class="forecast" aria-labelledby="forecast-caption">
+      <div class="toolbar">
+        <button type="button" class="btn btn-primary" id="refresh" data-i18n="refresh">Actualiser</button>
+        <span id="updated" class="muted" aria-live="polite"></span>
+      </div>
+      <div id="status" class="status" role="status" hidden></div>
+      <div class="table-scroll" tabindex="0" aria-labelledby="forecast-caption">
+        <table id="forecast" class="forecast-table">
+          <caption id="forecast-caption" class="sr-only" data-i18n="tableCaption">Prévisions sur 16 jours, un jour par ligne, un lieu par colonne</caption>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div class="below">
+        <ul class="legend" aria-label="Repères" data-i18n-aria-label="legendHeading">
+          <li><span class="swatch swatch-weekend" aria-hidden="true"></span><span data-i18n="weekend">Week-end</span></li>
+          <li><span class="swatch swatch-cold" aria-hidden="true"></span><span data-i18n="cueCold">Gel (min ≤ 0 °C)</span></li>
+          <li><span class="swatch swatch-hot" aria-hidden="true"></span><span data-i18n="cueHot">Forte chaleur (max ≥ 28 °C)</span></li>
+          <li><span class="swatch swatch-wet" aria-hidden="true"></span><span data-i18n="cueWet">Forte pluie (≥ 10 mm)</span></li>
+          <li><span class="swatch swatch-dry" aria-hidden="true"></span><span data-i18n="cueDry">Temps sec (0 mm)</span></li>
+        </ul>
+        <p class="attribution">
+          <span data-i18n="attrWeather">Données météo :</span>
+          <a href="https://open-meteo.com/" rel="noopener">Open-Meteo.com</a>
+          (<a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>).
+          <span data-i18n="attrPlaces">Recherche de lieux :</span>
+          <a href="https://www.geonames.org/" rel="noopener">GeoNames</a>
+          (<a href="https://creativecommons.org/licenses/by/4.0/" rel="noopener">CC BY 4.0</a>).
+        </p>
+        <p class="muted small" id="service-line" data-i18n="serviceFree">Service gratuit Open-Meteo, réservé à un usage non commercial.</p>
+        <p class="muted small" data-i18n="estimateNote">Les prévisions sont des estimations de modèles météo, moins fiables au-delà d'une semaine : ne vous y fiez pas pour une décision de sécurité.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <span data-i18n="footerLicense">Logiciel libre, licence MIT.</span>
+      <a href="https://github.com/marinailsapps/meteo" rel="noopener" data-i18n="footerSource">Code source</a> ·
+      <a href="https://apps.marinails.site/docs/meteo" rel="noopener" data-i18n="footerGuide">Guide</a> ·
+      <a href="https://apps.marinails.site/meteo" rel="noopener">apps.marinails.site</a>
+    </div>
+  </footer>
+
+  <dialog id="key-dialog" class="dialog" aria-labelledby="key-heading">
+    <form id="key-form" novalidate>
+      <h2 id="key-heading" data-i18n="keyHeading">Votre clé API Open-Meteo</h2>
+      <p data-i18n="keyIntro">Sans clé, l'application utilise le service gratuit d'Open-Meteo, réservé à un usage non commercial et limité en nombre de requêtes. Pour un usage professionnel, souscrivez un abonnement auprès d'Open-Meteo, puis saisissez votre clé ici.</p>
+      <p data-i18n="keyPrivacy">La clé reste dans votre navigateur et n'est envoyée qu'à Open-Meteo : personne d'autre n'y a accès. Vous pouvez l'effacer à tout moment.</p>
+      <p><a href="https://open-meteo.com/en/pricing" rel="noopener" target="_blank" data-i18n="keyPricing">Tarifs Open-Meteo</a></p>
+      <p id="key-current" class="muted small"></p>
+      <label for="key-input" class="label" data-i18n="keyLabel">Clé API</label>
+      <div class="key-row">
+        <input id="key-input" type="password" autocomplete="off" spellcheck="false" autocapitalize="off" maxlength="200">
+        <button type="button" class="btn btn-ghost" id="key-toggle" aria-controls="key-input" aria-pressed="false" data-i18n="keyShow">Afficher</button>
+      </div>
+      <label class="check"><input type="checkbox" id="key-session"> <span data-i18n="keySessionOnly">Ne pas mémoriser (la clé est oubliée à la fermeture de l'onglet)</span></label>
+      <p id="key-result" class="key-result" role="status"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-ghost" id="key-test" data-i18n="keyTest">Tester la clé</button>
+        <button type="button" class="btn btn-primary" id="key-save" data-i18n="keySave">Enregistrer</button>
+        <button type="button" class="btn btn-ghost" id="key-clear" data-i18n="keyClear">Effacer</button>
+        <button type="button" class="btn btn-ghost" id="key-close" data-i18n="keyClose">Fermer</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
