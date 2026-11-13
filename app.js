@@ -2,7 +2,7 @@
  * Planificateur météo / Weather planner
  * Static app: the browser calls Open-Meteo directly. Places, language, cache
  * and the optional API key are kept in this browser only.
- * MIT License, (c) 2026 Maryna SYOMKO, entrepreneur individuel.
+ * MIT License, Copyright (c) 2026 les auteurs de Météo — publié par Maryna SYOMKO, entrepreneur individuel.
  */
 "use strict";
 

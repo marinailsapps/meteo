@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1 — 2026-11-13
+
+- Corrected rights notice: "Copyright (c) 2026 les auteurs de Météo — publié par Maryna SYOMKO, entrepreneur individuel" (LICENSE, README, `app.js`). Release archive renamed `meteo-1.0.1.zip`. No change to the planner itself.
+
 ## 1.0.0 — 2026-11-12
 
 First public release.

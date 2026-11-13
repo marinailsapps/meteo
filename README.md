@@ -19,7 +19,7 @@ Compare the 16-day weather forecast for several places side by side, in one tabl
 
 ## Use it yourself
 
-1. **Download and open.** Download `meteo-1.0.0.zip` from the [latest release](https://github.com/marinailsapps/meteo/releases/latest), unzip it and open `index.html` in a recent browser (Firefox, Chrome, Edge or Safari). An Internet connection is needed to load forecasts.
+1. **Download and open.** Download `meteo-1.0.1.zip` from the [latest release](https://github.com/marinailsapps/meteo/releases/latest), unzip it and open `index.html` in a recent browser (Firefox, Chrome, Edge or Safari). An Internet connection is needed to load forecasts.
 2. **Put it on your own site.** Copy `index.html`, `app.js`, `app.css`, `i18n.js` and `favicon.svg` to any static web host. No PHP, no database, no server-side code.
 3. **Fork and publish with GitHub Pages.** Fork this repository, then in *Settings → Pages* choose *Deploy from a branch*, branch `main`, folder `/ (root)`.
 
@@ -57,7 +57,7 @@ apps@marinails.site · https://apps.marinails.site/meteo
 
 ## License
 
-[MIT](LICENSE) © 2026 Maryna SYOMKO, entrepreneur individuel. Provided free of charge and as is, without support.
+[MIT](LICENSE). Copyright (c) 2026 les auteurs de Météo — publié par Maryna SYOMKO, entrepreneur individuel. Provided free of charge and as is, without support.
 
 ---
 
